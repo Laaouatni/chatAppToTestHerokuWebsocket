@@ -31,9 +31,9 @@
       document.querySelector(".open").hidden = true;
     });
 
-    ws.addEventListener("error", () => {
-      window.location.reload();
-    });
+    // ws.addEventListener("error", () => {
+    //   window.location.reload();
+    // });
 
     ws.addEventListener("message", (thisWsMessage) => {
       const li = document.createElement('li');
