@@ -7,6 +7,10 @@
 
 <body style="display: grid; gap: 1rem; padding: 0.5rem;">
   <div style="border: 2px solid black; padding: 10px;">
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+      <input type="text" id="messageInput" placeholder="Type your message..." style="flex: 1;">
+      <button onclick="sendMessage()">Send</button>
+    </div>
     <p>isConnected?</p>
     <div style="width:50px; height:50px; background-color:red;" class="close"></div>
     <div style="width:50px; height:50px; background-color:green;" class="open" hidden></div>
@@ -16,10 +20,24 @@
     <ul></ul>
   </div>
 
-
   <script>
     const ws = new WebSocket('wss://pesentiws-43f6274c0f11.herokuapp.com:8080/');
     const messageList = document.querySelector("ul");
+    const messageInput = document.getElementById("messageInput");
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (message && ws.readyState === WebSocket.OPEN) {
+        ws.send(message);
+        messageInput.value = '';
+      }
+    }
+
+    messageInput.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    });
 
     ws.addEventListener("open", () => {
       document.querySelector(".close").hidden = true;
@@ -30,10 +48,6 @@
       document.querySelector(".close").hidden = false;
       document.querySelector(".open").hidden = true;
     });
-
-    // ws.addEventListener("error", () => {
-    //   window.location.reload();
-    // });
 
     ws.addEventListener("message", (thisWsMessage) => {
       const li = document.createElement('li');
