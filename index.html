@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Basic WebSocket Chat</title>
+</head>
+
+<body style="display: grid; gap: 1rem; padding: 0.5rem;">
+  <div style="border: 2px solid black; padding: 10px;">
+    <p>isConnected?</p>
+    <div style="width:50px; height:50px; background-color:red;" class="close"></div>
+    <div style="width:50px; height:50px; background-color:green;" class="open" hidden></div>
+  </div>
+
+  <div style="border: 2px solid black; padding: 10px;">
+    <ul></ul>
+  </div>
+
+
+  <script>
+    const ws = new WebSocket('wss://pesentiws-43f6274c0f11.herokuapp.com/');
+    const messageList = document.querySelector("ul");
+
+    ws.addEventListener("open", () => {
+      document.querySelector(".close").hidden = true;
+      document.querySelector(".open").hidden = false;
+    });
+
+    ws.addEventListener("close", () => {
+      document.querySelector(".close").hidden = false;
+      document.querySelector(".open").hidden = true;
+    });
+
+    ws.addEventListener("error", () => {
+      window.location.reload();
+    });
+
+    ws.addEventListener("message", (thisWsMessage) => {
+      const li = document.createElement('li');
+      li.textContent = thisWsMessage.data;
+      messageList.appendChild(li);
+    });
+  </script>
+</body>
+
+</html>
