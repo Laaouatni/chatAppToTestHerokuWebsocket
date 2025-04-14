@@ -49,9 +49,13 @@
       document.querySelector(".open").hidden = true;
     });
 
-    ws.addEventListener("message", (thisWsMessage) => {
+    ws.addEventListener("message", async (thisWsMessage) => {
       const li = document.createElement('li');
-      li.textContent = thisWsMessage.data;
+      if (thisWsMessage.data instanceof Blob) {
+        li.textContent = await thisWsMessage.data.text();
+      } else {
+        li.textContent = thisWsMessage.data;
+      }
       messageList.appendChild(li);
     });
   </script>
